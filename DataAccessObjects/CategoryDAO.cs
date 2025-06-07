@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos;
 using Microsoft.EntityFrameworkCore;
 using PhamQuocCuong_SE1821_A01_BE.Dtos;
 
@@ -31,6 +32,88 @@ namespace DataAccessObjects
                 IsActive = x.IsActive,
                 ParentCategoryId = x.ParentCategoryId,
             }).ToList();
+        }
+
+        public static async Task<CategoryDto> GetByIdAsync(short id)
+        {
+            try
+            {
+                using (var context = new FunewsManagementContext())
+                {
+                    var category = await context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
+
+                    if (category == null)
+                    {
+                        return null;
+                    }
+
+                    var dtoEntity = new CategoryDto
+                    {
+                        CategoryId = category.CategoryId,
+                        ParentCategoryId = category.ParentCategoryId,
+                        IsActive = category.IsActive,
+                        CategoryDesciption = category.CategoryDesciption,
+                        CategoryName = category.CategoryName,
+                    };
+
+                    return dtoEntity;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static async Task Update(short id, UpdateCategoryDto dto)
+        {
+            try
+            {
+                using (var context = new FunewsManagementContext())
+                {
+                    var category = new Category
+                    {
+                        CategoryId = id,
+                        CategoryName = dto.CategoryName,
+                        CategoryDesciption = dto.CategoryDesciption,
+                        IsActive = dto.IsActive,
+                        ParentCategoryId = dto.ParentCategoryId,
+                    };
+
+                    context.Entry<Category>(category).State = EntityState.Modified;
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static async Task Create(CreateCategoryDto dto)
+        {
+            try
+            {
+                using var context = new FunewsManagementContext();
+
+                var category = new Category
+                {
+                    CategoryName = dto.CategoryName,
+                    CategoryDesciption = dto.CategoryDesciption,
+                    IsActive = dto.IsActive,
+                    ParentCategoryId = dto.ParentCategoryId,
+                };
+
+                await context.Categories.AddAsync(category);
+                await context.SaveChangesAsync();
+            }
+
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
