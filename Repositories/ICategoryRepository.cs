@@ -1,5 +1,4 @@
-﻿using BusinessObjects.Dtos;
-using PhamQuocCuong_SE1821_A01_BE.Dtos;
+﻿using DataAccessObjects.Dtos;
 
 namespace Repositories
 {

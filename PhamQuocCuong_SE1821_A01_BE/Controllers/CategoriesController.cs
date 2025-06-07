@@ -1,10 +1,6 @@
-﻿using BusinessObjects.Dtos;
+﻿using DataAccessObjects.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
-using PhamQuocCuong_SE1821_A01_BE.Dtos;
 using Repositories;
-using System.Threading.Tasks;
 
 namespace PhamQuocCuong_SE1821_A01_BE.Controllers
 {

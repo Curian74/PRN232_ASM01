@@ -1,11 +1,8 @@
-﻿using BusinessObjects;
-
-namespace PhamQuocCuong_SE1821_A01_BE.Dtos
+﻿
+namespace DataAccessObjects.Dtos
 {
-    public class CategoryDto
+    public class UpdateCategoryDto
     {
-        public short CategoryId { get; set; }
-
         public string CategoryName { get; set; } = null!;
 
         public string CategoryDesciption { get; set; } = null!;

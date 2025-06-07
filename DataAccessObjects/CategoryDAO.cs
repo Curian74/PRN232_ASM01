@@ -1,7 +1,6 @@
 ﻿using BusinessObjects;
-using BusinessObjects.Dtos;
+using DataAccessObjects.Dtos;
 using Microsoft.EntityFrameworkCore;
-using PhamQuocCuong_SE1821_A01_BE.Dtos;
 
 namespace DataAccessObjects
 {

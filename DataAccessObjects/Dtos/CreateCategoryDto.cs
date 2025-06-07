@@ -1,5 +1,4 @@
-﻿
-namespace BusinessObjects.Dtos
+﻿namespace DataAccessObjects.Dtos
 {
     public class CreateCategoryDto
     {
