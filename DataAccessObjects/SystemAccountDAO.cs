@@ -24,5 +24,35 @@ namespace DataAccessObjects
 
             return systemAccounts;
         }
+        public static async Task DeleteAccount(short id)
+        {
+            try
+            {
+                using (var context = new FunewsManagementContext())
+                {
+                    var account = await context.SystemAccounts
+                        .Include(a => a.NewsArticles)
+                        .FirstOrDefaultAsync(a => a.AccountId == id);
+
+                    if (account == null)
+                    {
+                        throw new Exception("Cannot find the account.");
+                    }
+
+                    if (account.NewsArticles.Count > 0)
+                    {
+                        throw new InvalidOperationException("Cannot delete an account with new articles posted.");
+                    }
+
+                    context.SystemAccounts.Remove(account);
+                    context.SaveChanges();
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

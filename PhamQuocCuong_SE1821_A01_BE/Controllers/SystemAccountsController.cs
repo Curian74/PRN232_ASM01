@@ -19,5 +19,20 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
         {
             return Ok(await _systemAccountRepository.GetAccountsAsync());
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAccount(short id)
+        {
+            try
+            {
+                await _systemAccountRepository.DeleteAcountAsync(id);
+                return NoContent();
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
