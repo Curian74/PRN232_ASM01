@@ -24,6 +24,7 @@ namespace DataAccessObjects
 
             return systemAccounts;
         }
+
         public static async Task DeleteAccount(short id)
         {
             try
