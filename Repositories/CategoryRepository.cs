@@ -26,5 +26,10 @@ namespace Repositories
         {
             await CategoryDAO.Create(dto);
         }
+
+        public async Task DeleteAsync(short id)
+        {
+            await CategoryDAO.Delete(id);
+        }
     }
 }

@@ -115,5 +115,30 @@ namespace DataAccessObjects
                 throw new Exception(ex.Message);
             }
         }
+
+        public static async Task Delete(short id)
+        {
+            try
+            {
+                using var context = new FunewsManagementContext();
+                var category = context.Categories
+                    .Include(c => c.NewsArticles)
+                    .FirstOrDefault(c => c.CategoryId == id)
+                    ?? throw new KeyNotFoundException("Category not found.");
+
+                if (category.NewsArticles.Count > 0)
+                {
+                    throw new InvalidOperationException("Cannot delete a category with articles posted.");
+                }
+
+                context.Categories.Remove(category);
+                await context.SaveChangesAsync();
+            }
+
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

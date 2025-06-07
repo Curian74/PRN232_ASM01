@@ -77,5 +77,20 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(short id)
+        {
+            try
+            {
+                await _categoryRepository.DeleteAsync(id);
+                return NoContent();
+            }
+
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
