@@ -5,9 +5,9 @@ namespace Repositories
 {
     public class NewsArticleRepository : INewsArticleRepository
     {
-        public Task<List<NewsDto>> GetNewsAsync()
+        public Task<List<NewsDto>> GetNewsAsync(NewsQuery newsQuery)
         {
-            return NewsDAO.GetNewsArticleAsync();
+            return NewsDAO.GetNewsArticleAsync(newsQuery);
         }
     }
 }

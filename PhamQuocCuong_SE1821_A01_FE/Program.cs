@@ -1,3 +1,6 @@
+using PhamQuocCuong_SE1821_A01_FE.ApiServices;
+using PhamQuocCuong_SE1821_A01_FE.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +10,9 @@ builder.Services.AddHttpClient("api", httpClient =>
 {
     httpClient.BaseAddress = new Uri("https://localhost:7144/api/");
 });
+
+builder.Services.AddScoped<IApiService, ApiService>();
+builder.Services.AddScoped<NewsArticleService>();
 
 var app = builder.Build();
 

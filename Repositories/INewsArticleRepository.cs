@@ -1,9 +1,10 @@
-﻿using DataAccessObjects.Dtos;
+﻿using DataAccessObjects;
+using DataAccessObjects.Dtos;
 
 namespace Repositories
 {
     public interface INewsArticleRepository
     {
-        Task<List<NewsDto>> GetNewsAsync();
+        Task<List<NewsDto>> GetNewsAsync(NewsQuery newsQuery);
     }
 }

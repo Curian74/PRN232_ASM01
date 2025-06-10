@@ -1,21 +1,33 @@
 using Microsoft.AspNetCore.Mvc;
 using PhamQuocCuong_SE1821_A01_FE.Models;
+using PhamQuocCuong_SE1821_A01_FE.Services;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace PhamQuocCuong_SE1821_A01_FE.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly NewsArticleService _newsArticleService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(NewsArticleService newsArticleService)
         {
-            _logger = logger;
+            _newsArticleService = newsArticleService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? pageIndex = 1, int? pageSize = 10)
         {
-            return View();
+            try
+            {
+                var response = await _newsArticleService.GetNews(pageIndex, pageSize);
+
+                return View(response);
+            }
+
+            catch (Exception ex)
+            {
+                return View(ex);
+            }
         }
 
         public IActionResult Privacy()

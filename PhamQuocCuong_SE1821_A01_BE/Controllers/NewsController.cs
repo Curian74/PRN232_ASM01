@@ -1,8 +1,6 @@
-﻿using DataAccessObjects.Dtos;
-using Microsoft.AspNetCore.Http;
+﻿using DataAccessObjects;
+using DataAccessObjects.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using PhamQuocCuong_SE1821_A01_BE.Pagination;
-using PhamQuocCuong_SE1821_A01_BE.Queries;
 using Repositories;
 
 namespace PhamQuocCuong_SE1821_A01_BE.Controllers
@@ -21,13 +19,9 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
         [HttpGet]
         public async Task<IActionResult> Paged([FromQuery] NewsQuery newsQuery)
         {
-            var newsArticles = await _newsArticleRepository.GetNewsAsync();
+            var newsArticles = await _newsArticleRepository.GetNewsAsync(newsQuery);
 
-            var skip = (newsQuery.PageIndex - 1) * newsQuery.PageSize;
-
-            var pagedData = newsArticles.Skip(skip).Take(newsQuery.PageSize);
-
-            var data = new PagedResult<NewsDto>(pagedData,
+            var data = new PagedResult<NewsDto>(newsArticles,
                 newsQuery.PageIndex, newsQuery.PageSize, newsArticles.Count);
 
             return Ok(data);
