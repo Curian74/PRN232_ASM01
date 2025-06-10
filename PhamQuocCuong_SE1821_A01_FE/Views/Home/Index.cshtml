@@ -3,10 +3,10 @@
 @model PagedResult<NewsDto>
 
 @{
-    ViewBag.Title = "News List";
+    ViewBag.Title = "Home";
 }
 
-<h2 class="mb-4">News Articles</h2>
+<h2 class="mb-4 text-center">News Articles</h2>
 
 <div class="list-group">
     @foreach (var news in Model.Items)
@@ -15,8 +15,8 @@
             <h5 class="mb-1 text-primary">@news.NewsTitle</h5>
             <p class="mb-1"><strong>Source:</strong> @news.NewsSource</p>
             <small class="text-muted">
-                <strong>Created:</strong> @news.CreatedDate?.ToString("dd/MM/yyyy") |
-                <strong>Status:</strong> @(news.NewsStatus == true ? "Active" : "Inactive")
+                <strong>Created:</strong> @news.CreatedDate?.ToString("dd/MM/yyyy")
+                <strong>Author:</strong> @news.AuthorName
             </small>
         </div>
     }

@@ -23,5 +23,7 @@
         public short? UpdatedById { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
+
+        public string? AuthorName { get; set; }
     }
 }
