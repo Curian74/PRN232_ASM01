@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ISystemAccountRepository, SystemAccountRepository>();
 builder.Services.AddSingleton<ICategoryRepository, CategoryRepository>();
+builder.Services.AddSingleton<INewsArticleRepository, NewsArticleRepository>();
 
 var app = builder.Build();
 
