@@ -36,7 +36,7 @@ namespace DataAccessObjects
                         NewsStatus = n.NewsStatus,
                         NewsTitle = n.NewsTitle,
                         UpdatedById = n.UpdatedById,
-                        AuthorName = n.CreatedBy.AccountName
+                        AuthorName = n.CreatedBy.AccountName,
                     })
                         .ToListAsync();
 

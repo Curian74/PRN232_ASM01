@@ -1,4 +1,6 @@
-﻿namespace DataAccessObjects.Dtos
+﻿using BusinessObjects;
+
+namespace DataAccessObjects.Dtos
 {
     public class NewsDto
     {

@@ -49,11 +49,13 @@ namespace PhamQuocCuong_SE1821_A01_FE.ApiServices
         {
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException($"Request failed: {response.StatusCode}");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Request failed: {errorContent}");
             }
 
             var jsonResponse = await response.Content.ReadFromJsonAsync<T>();
             return jsonResponse ?? throw new InvalidOperationException("Response content is null");
         }
+
     }
 }

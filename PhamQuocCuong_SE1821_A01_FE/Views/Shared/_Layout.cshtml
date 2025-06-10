@@ -14,15 +14,34 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-items-center">
                     <ul class="navbar-nav flex-grow-1">
-                        @* <li class="nav-item"> *@
-                        @*     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
-                        @* </li> *@
+
                     </ul>
+
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <div class="d-flex justify-content-end align-items-center">
+                            <a class="btn btn-primary fs-6 px-4" asp-controller="Auth" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-end align-items-center gap-3">
+                            <span class="fs-6">Hello, <strong>@User.Identity.Name</strong></span>
+                            <form method="post" asp-controller="Auth" asp-action="Logout">
+                                <button type="submit" class="btn btn-danger fs-6 px-4">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    }
+
                 </div>
             </div>
         </nav>

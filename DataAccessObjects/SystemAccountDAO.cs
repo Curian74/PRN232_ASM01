@@ -55,5 +55,28 @@ namespace DataAccessObjects
                 throw new Exception(e.Message);
             }
         }
+
+        public static async Task<SystemAccount> FindUserByEmailAndPassword(string email, string password)
+        {
+            try
+            {
+                using var context = new FunewsManagementContext();
+
+                var account = await context.SystemAccounts
+                    .FirstOrDefaultAsync(a => a.AccountEmail == email && a.AccountPassword == password);
+
+                if (account == null)
+                {
+                    throw new Exception("Invalid credentials.");
+                }
+
+                return account;
+            }
+
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

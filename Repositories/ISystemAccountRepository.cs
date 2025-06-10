@@ -6,5 +6,6 @@ namespace Repositories
     {
         Task<List<SystemAccount>> GetAccountsAsync();
         Task DeleteAcountAsync(short id);
+        Task<SystemAccount> FindByEmailAndPassword(string email, string password);
     }
 }

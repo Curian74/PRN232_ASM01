@@ -10,6 +10,11 @@ namespace Repositories
             await SystemAccountDAO.DeleteAccount(id);
         }
 
+        public Task<SystemAccount> FindByEmailAndPassword(string email, string password)
+        {
+            return SystemAccountDAO.FindUserByEmailAndPassword(email, password);
+        }
+
         public Task<List<SystemAccount>> GetAccountsAsync()
         {
             return SystemAccountDAO.GetAccounts();

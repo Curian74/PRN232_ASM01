@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using PhamQuocCuong_SE1821_A01_FE.ApiServices;
 using PhamQuocCuong_SE1821_A01_FE.Services;
 
@@ -13,6 +14,16 @@ builder.Services.AddHttpClient("api", httpClient =>
 
 builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddScoped<NewsArticleService>();
+builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddAuthentication("CookieAuth")
+    .AddCookie("CookieAuth", opt =>
+    {
+        opt.LoginPath = "/auth/login";
+        opt.LogoutPath = "/auth/logout";
+        opt.ExpireTimeSpan = TimeSpan.FromDays(7);
+        opt.SlidingExpiration = true;
+    });
 
 var app = builder.Build();
 
@@ -28,6 +39,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
