@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessObjects;
+using DataAccessObjects.Dtos;
+using DataAccessObjects;
+using DataAccessObjects.Queries;
+using Microsoft.AspNetCore.Mvc;
 using Repositories;
 
 namespace PhamQuocCuong_SE1821_A01_BE.Controllers
@@ -14,10 +18,15 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
             _systemAccountRepository = systemAccountRepository;
         }
 
-        [HttpGet]   
-        public async Task<IActionResult> GetAccounts()
+        [HttpGet]
+        public async Task<IActionResult> GetAccounts([FromQuery]SystemAccountQuery query)
         {
-            return Ok(await _systemAccountRepository.GetAccountsAsync());
+            var accounts = await _systemAccountRepository.GetAccountsAsync(query);
+
+            var data = new PagedResult<SystemAccountDto>(accounts,
+            query.PageIndex, query.PageSize, accounts.Count);
+
+            return Ok(data);
         }
 
         [HttpDelete("{id}")]

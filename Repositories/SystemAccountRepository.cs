@@ -1,12 +1,13 @@
 ﻿using BusinessObjects;
 using DataAccessObjects;
+using DataAccessObjects.Dtos;
+using DataAccessObjects.Queries;
 using Microsoft.Extensions.Configuration;
 
 namespace Repositories
 {
     public class SystemAccountRepository : ISystemAccountRepository
     {
-
         private readonly IConfiguration _configuration;
 
         public SystemAccountRepository(IConfiguration configuration)
@@ -24,9 +25,9 @@ namespace Repositories
             return SystemAccountDAO.FindUserByEmailAndPassword(email, password, _configuration);
         }
 
-        public Task<List<SystemAccount>> GetAccountsAsync()
+        public Task<List<SystemAccountDto>> GetAccountsAsync(SystemAccountQuery query)
         {
-            return SystemAccountDAO.GetAccounts();
+            return SystemAccountDAO.GetAccounts(query);
         }
     }
 }

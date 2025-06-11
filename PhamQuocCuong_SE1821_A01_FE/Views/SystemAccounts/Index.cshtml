@@ -1,0 +1,60 @@
+﻿@model PagedResult<SystemAccountDto>
+
+@{
+    ViewData["Title"] = "Account List";
+}
+
+<h2 class="mb-4 text-center">Account List</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Account ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items != null && Model.Items.Any())
+        {
+            foreach (var account in Model.Items)
+            {
+                <tr>
+                    <td>@account.AccountId</td>
+                    <td>@account.AccountName</td>
+                    <td>@account.AccountEmail</td>
+                    <td>
+                        @(account.AccountRole == 1 ? "Staff" :
+                            account.AccountRole == 2 ? "Lecturer" :
+                            account.AccountRole == 3 ? "Admin" : "Unknown")
+                    </td>
+
+                    <td>
+                        <a class="btn btn-primary">Edit</a>
+                        <a class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">No accounts found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, pageSize = Model.PageSize })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

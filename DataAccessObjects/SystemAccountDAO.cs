@@ -1,4 +1,6 @@
 ﻿using BusinessObjects;
+using DataAccessObjects.Dtos;
+using DataAccessObjects.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -6,15 +8,29 @@ namespace DataAccessObjects
 {
     public class SystemAccountDAO
     {
-        public static async Task<List<SystemAccount>> GetAccounts()
+        public static async Task<List<SystemAccountDto>> GetAccounts(SystemAccountQuery systemAccountQuery)
         {
-            var systemAccounts = new List<SystemAccount>();
-
             try
             {
                 using (var context = new FunewsManagementContext())
                 {
-                    systemAccounts = await context.SystemAccounts.ToListAsync();
+                    var accounts = context.SystemAccounts.AsQueryable();
+
+                    var skip = (systemAccountQuery.PageIndex - 1) * systemAccountQuery.PageSize;
+
+                    var pagedData = accounts.Skip(skip).Take(systemAccountQuery.PageSize);
+
+                    var dtoEntities = await pagedData.Select(x => new SystemAccountDto
+                    {
+                        AccountId = x.AccountId,
+                        AccountEmail = x.AccountEmail,
+                        AccountName = x.AccountName,
+                        AccountPassword = x.AccountPassword,
+                        AccountRole = x.AccountRole,
+                    })
+                        .ToListAsync();
+
+                    return dtoEntities;
                 }
             }
 
@@ -22,8 +38,6 @@ namespace DataAccessObjects
             {
                 throw new Exception(ex.Message);
             }
-
-            return systemAccounts;
         }
 
         public static async Task DeleteAccount(short id)

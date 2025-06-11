@@ -15,6 +15,7 @@ builder.Services.AddHttpClient("api", httpClient =>
 builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddScoped<NewsArticleService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<SystemAccountService>();
 
 builder.Services.AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", opt =>
