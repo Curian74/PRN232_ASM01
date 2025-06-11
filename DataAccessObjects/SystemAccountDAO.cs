@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccessObjects
 {
@@ -56,12 +57,45 @@ namespace DataAccessObjects
             }
         }
 
-        public static async Task<SystemAccount> FindUserByEmailAndPassword(string email, string password)
+        public static async Task<SystemAccount> FindUserByEmailAndPassword(string email, string password, IConfiguration _configuration)
         {
             try
             {
+                var adminEmail = _configuration["AdminAccount:AccountEmail"];
+                var adminPassword = _configuration["AdminAccount:AccountPassword"];
+                var adminName = _configuration["AdminAccount:AccountName"];
+                var adminRoleStr = _configuration["AdminAccount:AccountRole"];
+
+                int.TryParse(adminRoleStr, out int adminRole);
+
                 using var context = new FunewsManagementContext();
 
+                // Check if admin account needs to be inserted
+                var existingAdmin = await context.SystemAccounts
+                    .FirstOrDefaultAsync(a => a.AccountEmail == adminEmail);
+
+                if (existingAdmin == null)
+                {
+
+                    short latestAccountId = await context.SystemAccounts
+                        .OrderByDescending(x => x.AccountId)
+                        .Select(x => x.AccountId)
+                        .FirstOrDefaultAsync();
+
+                    var newAdmin = new SystemAccount
+                    {
+                        AccountId = latestAccountId,
+                        AccountEmail = adminEmail,
+                        AccountPassword = adminPassword,
+                        AccountName = adminName,
+                        AccountRole = adminRole
+                    };
+
+                    await context.SystemAccounts.AddAsync(newAdmin);
+                    await context.SaveChangesAsync();
+                }
+
+                // Find the login user normally
                 var account = await context.SystemAccounts
                     .FirstOrDefaultAsync(a => a.AccountEmail == email && a.AccountPassword == password);
 
@@ -72,8 +106,7 @@ namespace DataAccessObjects
 
                 return account;
             }
-
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }

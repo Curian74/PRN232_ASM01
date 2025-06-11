@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using PhamQuocCuong_SE1821_A01_FE.Services;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace PhamQuocCuong_SE1821_A01_FE.Controllers
 {
