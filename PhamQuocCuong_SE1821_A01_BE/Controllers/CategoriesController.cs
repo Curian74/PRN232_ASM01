@@ -1,4 +1,6 @@
-﻿using DataAccessObjects.Dtos;
+﻿using DataAccessObjects;
+using DataAccessObjects.Dtos;
+using DataAccessObjects.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Repositories;
 
@@ -23,6 +25,21 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
             return Ok(categories);
         }
 
+        [HttpGet]
+        [Route("Paged")]
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories([FromQuery]CategoryQuery query)
+        {
+            var news = await _categoryRepository.GetAccountsAsync(query);
+
+            var skip = (query.PageIndex - 1) * query.PageSize;
+
+            var pagedData = news.Skip(skip).Take(query.PageSize);
+
+            var data = new PagedResult<CategoryDto>(pagedData,
+            query.PageIndex, query.PageSize, news.Count);
+
+            return Ok(data);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDto>> GetCategory(short id)

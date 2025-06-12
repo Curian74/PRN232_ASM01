@@ -1,5 +1,6 @@
 ﻿using DataAccessObjects;
 using DataAccessObjects.Dtos;
+using DataAccessObjects.Queries;
 
 namespace Repositories
 {
@@ -28,6 +29,11 @@ namespace Repositories
         public async Task DeleteAsync(short id)
         {
             await CategoryDAO.Delete(id);
+        }
+
+        public async Task<List<CategoryDto>> GetAccountsAsync(CategoryQuery query)
+        {
+            return await CategoryDAO.GetPaged(query);
         }
     }
 }

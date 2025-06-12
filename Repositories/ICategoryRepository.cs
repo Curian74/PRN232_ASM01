@@ -1,4 +1,5 @@
 ﻿using DataAccessObjects.Dtos;
+using DataAccessObjects.Queries;
 
 namespace Repositories
 {
@@ -9,5 +10,6 @@ namespace Repositories
         Task UpdateAsync(short id, UpdateCategoryDto dto);
         Task CreateAsync(CreateCategoryDto dto);
         Task DeleteAsync(short id);
+        Task<List<CategoryDto>> GetAccountsAsync(CategoryQuery query);
     }
 }

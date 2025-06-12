@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using DataAccessObjects.Dtos;
+using DataAccessObjects.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessObjects
@@ -137,6 +138,34 @@ namespace DataAccessObjects
             catch(Exception e)
             {
                 throw new Exception(e.Message);
+            }
+        }
+
+        public static async Task<List<CategoryDto>> GetPaged(CategoryQuery query)
+        {
+            try
+            {
+                using (var context = new FunewsManagementContext())
+                {
+                    var accounts = context.Categories.AsQueryable();
+
+                    var dtoEntities = await accounts.Select(x => new CategoryDto
+                    {
+                       CategoryDesciption = x.CategoryDesciption,
+                       CategoryId = x.CategoryId,
+                       CategoryName = x.CategoryName,
+                       IsActive = x.IsActive,
+                       ParentCategoryId = x.ParentCategoryId
+                    })
+                        .ToListAsync();
+
+                    return dtoEntities;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

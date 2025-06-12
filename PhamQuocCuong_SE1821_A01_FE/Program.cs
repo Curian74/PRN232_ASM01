@@ -16,6 +16,7 @@ builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddScoped<NewsArticleService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<SystemAccountService>();
+builder.Services.AddScoped<CategoryService>();
 
 builder.Services.AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", opt =>
