@@ -87,14 +87,14 @@ namespace DataAccessObjects
                 if (existingAdmin == null)
                 {
 
-                    short latestAccountId = await context.SystemAccounts
+                    int latestAccountId = await context.SystemAccounts
                         .OrderByDescending(x => x.AccountId)
-                        .Select(x => x.AccountId)
+                        .Select(x => (int)x.AccountId)
                         .FirstOrDefaultAsync();
 
                     var newAdmin = new SystemAccount
                     {
-                        AccountId = latestAccountId,
+                        AccountId = (short)(latestAccountId + 1),
                         AccountEmail = adminEmail,
                         AccountPassword = adminPassword,
                         AccountName = adminName,
@@ -133,10 +133,15 @@ namespace DataAccessObjects
                     throw new Exception("Password must match!");
                 }
 
+                int latestAccountId = await context.SystemAccounts
+                        .OrderByDescending(x => x.AccountId)
+                        .Select(x => (int)x.AccountId)
+                        .FirstOrDefaultAsync();
+
                 {
                     var account = new SystemAccount
                     {
-                        AccountId = dto.AccountId,
+                        AccountId = (short)(latestAccountId + 1),
                         AccountEmail = dto.AccountEmail,
                         AccountName = dto.AccountName,
                         AccountRole = dto.AccountRole,
