@@ -23,7 +23,11 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
         {
             var accounts = await _systemAccountRepository.GetAccountsAsync(query);
 
-            var data = new PagedResult<SystemAccountDto>(accounts,
+            var skip = (query.PageIndex - 1) * query.PageSize;
+
+            var pagedData = accounts.Skip(skip).Take(query.PageSize);
+
+            var data = new PagedResult<SystemAccountDto>(pagedData,
             query.PageIndex, query.PageSize, accounts.Count);
 
             return Ok(data);
@@ -36,6 +40,22 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
             {
                 await _systemAccountRepository.DeleteAcountAsync(id);
                 return NoContent();
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateAccountDto dto)
+        {
+            try
+            {
+                var data = await _systemAccountRepository.CreateAsync(dto);
+
+                return Ok(data);
             }
 
             catch (Exception ex)

@@ -1,0 +1,61 @@
+﻿@model CreateAccountDto
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<h2>Create Account</h2>
+
+<form asp-action="Create" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group w-25">
+        <label asp-for="AccountId" class="control-label"></label>
+        <input asp-for="AccountId" class="form-control" />
+        <span asp-validation-for="AccountId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group w-25">
+        <label asp-for="AccountName" class="control-label"></label>
+        <input asp-for="AccountName" class="form-control" />
+        <span asp-validation-for="AccountName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group w-25">
+        <label asp-for="AccountEmail" class="control-label"></label>
+        <input asp-for="AccountEmail" class="form-control" type="email" />
+        <span asp-validation-for="AccountEmail" class="text-danger"></span>
+    </div>
+
+    <div class="form-group w-25">
+        <label asp-for="AccountRole" class="control-label"></label>
+        <select asp-for="AccountRole" class="form-control">
+            <option value="">-- Select Role --</option>
+            <option value="1">Staff</option>
+            <option value="2">Lecturer</option>
+        </select>
+        <span asp-validation-for="AccountRole" class="text-danger"></span>
+    </div>
+
+    <div class="form-group w-25">
+        <label asp-for="AccountPassword" class="control-label"></label>
+        <input asp-for="AccountPassword" class="form-control" type="password" />
+        <span asp-validation-for="AccountPassword" class="text-danger"></span>
+    </div>
+
+    <div class="form-group w-25 mb-3">
+        <label asp-for="ConfirmPass" class="control-label"></label>
+        <input asp-for="ConfirmPass" class="form-control" type="password" />
+        <span asp-validation-for="ConfirmPass" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccessObjects.Dtos;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PhamQuocCuong_SE1821_A01_FE.Services;
 using System.Threading.Tasks;
 
@@ -18,6 +20,33 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             var result = await _accountService.GetAccountsAsync(pageIndex, pageSize);
 
             return View(result);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateAccountDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await _accountService.CreateAccountAsync(model);
+
+                return RedirectToAction("Index", "systemAccounts");
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
+                return View(model);
+            }
         }
     }
 }

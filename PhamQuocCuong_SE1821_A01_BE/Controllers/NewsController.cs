@@ -2,6 +2,7 @@
 using DataAccessObjects.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Repositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PhamQuocCuong_SE1821_A01_BE.Controllers
 {
@@ -21,7 +22,11 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
         {
             var newsArticles = await _newsArticleRepository.GetNewsAsync(newsQuery);
 
-            var data = new PagedResult<NewsDto>(newsArticles,
+            var skip = (newsQuery.PageIndex - 1) * newsQuery.PageSize;
+
+            var pagedData = newsArticles.Skip(skip).Take(newsQuery.PageSize);
+
+            var data = new PagedResult<NewsDto>(pagedData,
                 newsQuery.PageIndex, newsQuery.PageSize, newsArticles.Count);
 
             return Ok(data);

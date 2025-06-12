@@ -19,11 +19,7 @@ namespace DataAccessObjects
                         newsQueryable = newsQueryable.Where(n => n.NewsStatus == newsQuery.IsActive);
                     }
 
-                    var skip = (newsQuery.PageIndex - 1) * newsQuery.PageSize;
-
-                    var pagedData = newsQueryable.Skip(skip).Take(newsQuery.PageSize);
-
-                    var dtoEntities = await pagedData.Select(n => new NewsDto
+                    var dtoEntities = await newsQueryable.Select(n => new NewsDto
                     {
                         NewsArticleId = n.NewsArticleId,
                         CategoryId = n.CategoryId,

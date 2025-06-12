@@ -9,5 +9,6 @@ namespace Repositories
         Task<List<SystemAccountDto>> GetAccountsAsync(SystemAccountQuery query);
         Task DeleteAcountAsync(short id);
         Task<SystemAccount> FindByEmailAndPassword(string email, string password);
+        Task<SystemAccountDto> CreateAsync(CreateAccountDto dto);
     }
 }

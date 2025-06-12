@@ -20,5 +20,11 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
 
             return response;
         }
+
+        public async Task CreateAccountAsync(CreateAccountDto dto)
+        {
+            var response = await _apiService
+                .PostAsync<SystemAccountDto>($"SystemAccounts", dto);
+        }
     }
 }

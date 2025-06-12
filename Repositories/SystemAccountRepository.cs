@@ -15,6 +15,11 @@ namespace Repositories
             _configuration = configuration;
         }
 
+        public async Task<SystemAccountDto> CreateAsync(CreateAccountDto dto)
+        {
+            return await SystemAccountDAO.Create(dto);
+        }
+
         public async Task DeleteAcountAsync(short id)
         {
             await SystemAccountDAO.DeleteAccount(id);

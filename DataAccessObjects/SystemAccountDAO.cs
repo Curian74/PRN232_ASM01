@@ -16,11 +16,7 @@ namespace DataAccessObjects
                 {
                     var accounts = context.SystemAccounts.AsQueryable();
 
-                    var skip = (systemAccountQuery.PageIndex - 1) * systemAccountQuery.PageSize;
-
-                    var pagedData = accounts.Skip(skip).Take(systemAccountQuery.PageSize);
-
-                    var dtoEntities = await pagedData.Select(x => new SystemAccountDto
+                    var dtoEntities = await accounts.Select(x => new SystemAccountDto
                     {
                         AccountId = x.AccountId,
                         AccountEmail = x.AccountEmail,
@@ -123,6 +119,47 @@ namespace DataAccessObjects
             catch (Exception e)
             {
                 throw new Exception(e.Message);
+            }
+        }
+
+        public static async Task<SystemAccountDto> Create(CreateAccountDto dto)
+        {
+            try
+            {
+                using var context = new FunewsManagementContext();
+
+                if (dto.ConfirmPass != dto.AccountPassword)
+                {
+                    throw new Exception("Password must match!");
+                }
+
+                {
+                    var account = new SystemAccount
+                    {
+                        AccountId = dto.AccountId,
+                        AccountEmail = dto.AccountEmail,
+                        AccountName = dto.AccountName,
+                        AccountRole = dto.AccountRole,
+                        AccountPassword = dto.AccountPassword,
+                    };
+
+                    await context.SystemAccounts.AddAsync(account);
+                    await context.SaveChangesAsync();
+
+                    return new SystemAccountDto
+                    {
+                        AccountId = account.AccountId,
+                        AccountEmail = account.AccountEmail,
+                        AccountName = account.AccountName,
+                        AccountRole = account.AccountRole,
+                        AccountPassword = account.AccountPassword,
+                    };
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
