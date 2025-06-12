@@ -91,5 +91,13 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(short id)
+        {
+            var result = await _accountService.Delete(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }
