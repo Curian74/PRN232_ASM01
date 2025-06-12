@@ -63,5 +63,40 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAccount(short id)
+        {
+            var account = await _systemAccountRepository.FindById(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(account);
+        }
+
+        [HttpPut]
+        [Route("Edit")]
+        public async Task<IActionResult> Edit(EditAccountDto dto)
+        {
+            try
+            {
+                var result = await _systemAccountRepository.EditAsync(dto);
+
+                return Ok(result);
+            }
+
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

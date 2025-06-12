@@ -48,5 +48,48 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
                 return View(model);
             }
         }
+
+        public async Task<IActionResult> Edit(short id)
+        {
+            var account = await _accountService.GetByIdAsync(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            var modelType = new EditAccountDto
+            {
+                AccountEmail = account.AccountEmail,
+                AccountId = account.AccountId,
+                AccountName = account.AccountName,
+                AccountPassword = account.AccountPassword,
+                AccountRole = account.AccountRole,
+            };
+
+            return View(modelType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditAccountDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var result = await _accountService.UpdateAsync(model);
+
+                return RedirectToAction("Index");
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
+                return View(model);
+            }
+        }
     }
 }

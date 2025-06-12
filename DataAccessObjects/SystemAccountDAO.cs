@@ -167,5 +167,76 @@ namespace DataAccessObjects
                 throw new Exception(ex.Message);
             }
         }
+
+        public static async Task<SystemAccountDto> FindById(short id)
+        {
+            try
+            {
+                using (var context = new FunewsManagementContext())
+                {
+                    var account = await context.SystemAccounts
+                        .Include(a => a.NewsArticles)
+                        .FirstOrDefaultAsync(a => a.AccountId == id);
+
+                    if (account == null)
+                    {
+                        return null;
+                    }
+
+                    return new SystemAccountDto
+                    {
+                        AccountId = account.AccountId,
+                        AccountEmail = account.AccountEmail,
+                        AccountName = account.AccountName,
+                        AccountRole = account.AccountRole,
+                        AccountPassword = account.AccountPassword,
+                    };
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static async Task<SystemAccountDto> Edit(EditAccountDto dto)
+        {
+            using (var context = new FunewsManagementContext())
+            {
+                var account = await FindById(dto.AccountId);
+
+                if (account == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+
+                if (dto.ConfirmPass != dto.AccountPassword)
+                {
+                    throw new InvalidOperationException("Passwords must match!");
+                }
+
+                var entity = new SystemAccount
+                {
+                    AccountId = dto.AccountId,
+                    AccountEmail = dto.AccountEmail,
+                    AccountName = dto.AccountName,
+                    AccountRole = dto.AccountRole,
+                    AccountPassword = dto.AccountPassword,
+                };
+
+                context.SystemAccounts.Update(entity);
+                await context.SaveChangesAsync();
+
+                return new SystemAccountDto
+                {
+                    AccountId = dto.AccountId,
+                    AccountEmail = dto.AccountEmail,
+                    AccountName = dto.AccountName,
+                    AccountRole = dto.AccountRole,
+                    AccountPassword = dto.AccountPassword
+                };
+            }
+        }
     }
 }

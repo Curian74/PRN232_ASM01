@@ -26,5 +26,21 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             var response = await _apiService
                 .PostAsync<SystemAccountDto>($"SystemAccounts", dto);
         }
+
+        public async Task<SystemAccountDto> GetByIdAsync(short id)
+        {
+            var response = await _apiService
+                .GetAsync<SystemAccountDto>($"SystemAccounts/{id}");
+
+            return response;
+        }
+
+        public async Task<SystemAccountDto> UpdateAsync(EditAccountDto dto)
+        {
+            var response = await _apiService
+                .PutAsync<SystemAccountDto>($"SystemAccounts/Edit", dto);
+
+            return response;
+        }
     }
 }
