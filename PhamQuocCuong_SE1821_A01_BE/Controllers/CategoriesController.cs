@@ -81,8 +81,8 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
         {
             try
             {
-                await _categoryRepository.CreateAsync(dto);
-                return Created();
+                var result = await _categoryRepository.CreateAsync(dto);
+                return Ok(result);
             }
 
             catch (Exception ex)

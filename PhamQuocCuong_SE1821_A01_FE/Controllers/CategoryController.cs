@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccessObjects.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using PhamQuocCuong_SE1821_A01_FE.Services;
 
 namespace PhamQuocCuong_SE1821_A01_FE.Controllers
@@ -17,6 +18,33 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             var result = await _categorySerivce.GetCategoriesAsync(pageIndex, pageSize);
 
             return View(result);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateCategoryDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await _categorySerivce.CreateAsync(model);
+
+                return RedirectToAction("Index");
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
+                return View(model);
+            }
         }
     }
 }

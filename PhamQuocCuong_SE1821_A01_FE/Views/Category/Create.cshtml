@@ -1,0 +1,38 @@
+﻿@model CreateCategoryDto
+
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<h2>Create Category</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group w-25">
+        <label asp-for="CategoryName" class="control-label"></label>
+        <input asp-for="CategoryName" class="form-control" />
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group w-25">
+        <label asp-for="CategoryDesciption" class="control-label"></label>
+        <textarea asp-for="CategoryDesciption" class="form-control"></textarea>
+        <span asp-validation-for="CategoryDesciption" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input name="IsActive" value="true" type="checkbox" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

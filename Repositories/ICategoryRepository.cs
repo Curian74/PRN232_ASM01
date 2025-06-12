@@ -8,7 +8,7 @@ namespace Repositories
         Task<List<CategoryDto>> GetCategoriesAsync();
         Task<CategoryDto> GetCategoryByIdAsync(short id);
         Task UpdateAsync(short id, UpdateCategoryDto dto);
-        Task CreateAsync(CreateCategoryDto dto);
+        Task<CategoryDto> CreateAsync(CreateCategoryDto dto);
         Task DeleteAsync(short id);
         Task<List<CategoryDto>> GetAccountsAsync(CategoryQuery query);
     }

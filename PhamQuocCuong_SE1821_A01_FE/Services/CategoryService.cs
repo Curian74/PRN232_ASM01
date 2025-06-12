@@ -21,10 +21,12 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             return response;
         }
 
-        public async Task CreateAccountAsync(CreateAccountDto dto)
+        public async Task<CreateCategoryDto> CreateAsync(CreateCategoryDto dto)
         {
             var response = await _apiService
-                .PostAsync<SystemAccountDto>($"SystemAccounts", dto);
+                .PostAsync<CreateCategoryDto>($"Categories", dto);
+
+            return response;
         }
 
         public async Task<SystemAccountDto> GetByIdAsync(short id)

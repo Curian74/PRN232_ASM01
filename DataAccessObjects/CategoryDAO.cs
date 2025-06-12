@@ -92,7 +92,7 @@ namespace DataAccessObjects
             }
         }
 
-        public static async Task Create(CreateCategoryDto dto)
+        public static async Task<CategoryDto> Create(CreateCategoryDto dto)
         {
             try
             {
@@ -108,6 +108,14 @@ namespace DataAccessObjects
 
                 await context.Categories.AddAsync(category);
                 await context.SaveChangesAsync();
+
+                return new CategoryDto
+                {
+                    CategoryDesciption = category.CategoryDesciption,
+                    CategoryName = category.CategoryName,
+                    IsActive = dto.IsActive,
+                    ParentCategoryId = dto.ParentCategoryId,
+                };
             }
 
             catch(Exception ex)
