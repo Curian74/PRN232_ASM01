@@ -147,7 +147,7 @@ namespace DataAccessObjects
                 news.NewsSource = dto.NewsSource;
                 news.CategoryId = dto.CategoryId;
                 news.NewsStatus = dto.NewsStatus;
-                news.ModifiedDate = DateTime.UtcNow;
+                news.ModifiedDate = DateTime.Now;
                 news.UpdatedById = dto.CreatedById;
 
                 context.NewsArticles.Update(news);

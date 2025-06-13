@@ -6,6 +6,7 @@
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <input asp-for="NewsArticleId" type="hidden" />
+    <input name="CreatedById" type="hidden" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
 
     <div class="form-group w-25">
         <label asp-for="NewsArticleId" class="control-label"></label>
@@ -62,7 +63,7 @@
     </div>
 
     <div class="mt-3">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Edit</button>
         <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </div>
 
