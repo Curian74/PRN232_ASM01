@@ -100,6 +100,16 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
                 return NoContent();
             }
 
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
             catch (Exception e)
             {
                 return BadRequest(e.Message);

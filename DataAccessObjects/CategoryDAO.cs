@@ -118,7 +118,7 @@ namespace DataAccessObjects
                 };
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -126,27 +126,20 @@ namespace DataAccessObjects
 
         public static async Task Delete(short id)
         {
-            try
+
+            using var context = new FunewsManagementContext();
+            var category = context.Categories
+                .Include(c => c.NewsArticles)
+                .FirstOrDefault(c => c.CategoryId == id)
+                ?? throw new KeyNotFoundException();
+
+            if (category.NewsArticles.Count > 0)
             {
-                using var context = new FunewsManagementContext();
-                var category = context.Categories
-                    .Include(c => c.NewsArticles)
-                    .FirstOrDefault(c => c.CategoryId == id)
-                    ?? throw new KeyNotFoundException("Category not found.");
-
-                if (category.NewsArticles.Count > 0)
-                {
-                    throw new InvalidOperationException("Cannot delete a category with articles posted.");
-                }
-
-                context.Categories.Remove(category);
-                await context.SaveChangesAsync();
+                throw new InvalidOperationException("Cannot delete a category with articles posted.");
             }
 
-            catch(Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            context.Categories.Remove(category);
+            await context.SaveChangesAsync();
         }
 
         public static async Task<List<CategoryDto>> GetPaged(CategoryQuery query)
@@ -159,11 +152,11 @@ namespace DataAccessObjects
 
                     var dtoEntities = await accounts.Select(x => new CategoryDto
                     {
-                       CategoryDesciption = x.CategoryDesciption,
-                       CategoryId = x.CategoryId,
-                       CategoryName = x.CategoryName,
-                       IsActive = x.IsActive,
-                       ParentCategoryId = x.ParentCategoryId
+                        CategoryDesciption = x.CategoryDesciption,
+                        CategoryId = x.CategoryId,
+                        CategoryName = x.CategoryName,
+                        IsActive = x.IsActive,
+                        ParentCategoryId = x.ParentCategoryId
                     })
                         .ToListAsync();
 
