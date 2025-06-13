@@ -16,9 +16,9 @@ namespace Repositories
             return CategoryDAO.GetByIdAsync(id);
         }
 
-        public async Task UpdateAsync(short id, UpdateCategoryDto dto)
+        public async Task<CategoryDto> UpdateAsync(UpdateCategoryDto dto)
         {
-            await CategoryDAO.Update(id, dto);
+            return await CategoryDAO.Update(dto);
         }
 
         public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)

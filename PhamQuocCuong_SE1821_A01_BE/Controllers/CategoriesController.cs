@@ -54,25 +54,25 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
             return category;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(short id, UpdateCategoryDto dto)
+        [HttpPut]
+        [Route("Edit")]
+        public async Task<IActionResult> Edit(UpdateCategoryDto dto)
         {
             try
             {
-                var productTemp = await _categoryRepository.GetCategoryByIdAsync(id);
+                var result = await _categoryRepository.UpdateAsync(dto);
 
-                if (productTemp == null)
-                {
-                    return NotFound();
-                }
-
-                await _categoryRepository.UpdateAsync(id, dto);
-                return NoContent();
+                return Ok(result);
             }
 
-            catch(Exception ex)
+            catch (KeyNotFoundException)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
+            }
+
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
 

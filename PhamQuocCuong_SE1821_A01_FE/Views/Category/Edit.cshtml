@@ -1,0 +1,40 @@
+﻿@model UpdateCategoryDto
+
+@{
+    ViewData["Title"] = "Update Category";
+}
+
+<h2>Update Category</h2>
+
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <input asp-for="CategoryId" type="hidden" />
+
+    <div class="form-group w-25">
+        <label asp-for="CategoryName" class="control-label"></label>
+        <input asp-for="CategoryName" class="form-control" />
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group w-25">
+        <label asp-for="CategoryDesciption" class="control-label"></label>
+        <textarea asp-for="CategoryDesciption" class="form-control"></textarea>
+        <span asp-validation-for="CategoryDesciption" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input name="IsActive" checked="@Model.IsActive" value="true" type="checkbox" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Edit</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

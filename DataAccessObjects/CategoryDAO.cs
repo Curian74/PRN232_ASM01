@@ -66,7 +66,7 @@ namespace DataAccessObjects
             }
         }
 
-        public static async Task Update(short id, UpdateCategoryDto dto)
+        public static async Task<CategoryDto> Update(UpdateCategoryDto dto)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace DataAccessObjects
                 {
                     var category = new Category
                     {
-                        CategoryId = id,
+                        CategoryId = dto.CategoryId,
                         CategoryName = dto.CategoryName,
                         CategoryDesciption = dto.CategoryDesciption,
                         IsActive = dto.IsActive,
@@ -83,6 +83,14 @@ namespace DataAccessObjects
 
                     context.Entry<Category>(category).State = EntityState.Modified;
                     await context.SaveChangesAsync();
+
+                    return new CategoryDto
+                    {
+                        CategoryId = dto.CategoryId,
+                        CategoryDesciption = category.CategoryDesciption,
+                        IsActive = dto.IsActive,
+                        ParentCategoryId = dto.ParentCategoryId,
+                    };
                 }
             }
 
