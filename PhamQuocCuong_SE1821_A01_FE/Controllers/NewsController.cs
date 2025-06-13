@@ -123,5 +123,13 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var result = await _newsService.Delete(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }

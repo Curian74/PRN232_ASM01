@@ -43,10 +43,10 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             return response;
         }
 
-        public async Task<bool> Delete(short id)
+        public async Task<bool> Delete(string id)
         {
             var response = await _apiService
-                .DeleteAsync($"SystemAccounts/{id}");
+                .DeleteAsync($"News/{id}");
 
             return response;
         }

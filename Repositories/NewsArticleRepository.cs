@@ -10,6 +10,11 @@ namespace Repositories
             return NewsDAO.Create(dto);
         }
 
+        public async Task DeleteAsync(string id)
+        {
+            await NewsDAO.Delete(id);
+        }
+
         public Task<NewsDto> EditAsync(EditNewsDto dto)
         {
             return NewsDAO.Edit(dto);

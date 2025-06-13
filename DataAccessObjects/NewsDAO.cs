@@ -169,5 +169,32 @@ namespace DataAccessObjects
                 };
             }
         }
+
+        public static async Task Delete(string id)
+        {
+            try
+            {
+                using (var context = new FunewsManagementContext())
+                {
+                    var news = await context.NewsArticles
+                        .Include(x => x.Tags)
+                        .FirstOrDefaultAsync(a => a.NewsArticleId == id);
+
+                    if (news == null)
+                    {
+                        throw new Exception("Cannot find the news.");
+                    }
+
+                    news.Tags.Clear();
+                    context.NewsArticles.Remove(news);
+                    context.SaveChanges();
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }
