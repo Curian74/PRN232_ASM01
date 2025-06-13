@@ -10,6 +10,16 @@ namespace Repositories
             return NewsDAO.Create(dto);
         }
 
+        public Task<NewsDto> EditAsync(EditNewsDto dto)
+        {
+            return NewsDAO.Edit(dto);
+        }
+
+        public async Task<NewsDto> FindById(string id)
+        {
+            return await NewsDAO.FindById(id);
+        }
+
         public Task<List<NewsDto>> GetNewsAsync(NewsQuery newsQuery)
         {
             return NewsDAO.GetNewsArticleAsync(newsQuery);

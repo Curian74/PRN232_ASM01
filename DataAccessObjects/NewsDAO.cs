@@ -92,5 +92,82 @@ namespace DataAccessObjects
                 UpdatedById = null,
             };
         }
+
+        public static async Task<NewsDto> FindById(string id)
+        {
+            try
+            {
+                using (var context = new FunewsManagementContext())
+                {
+                    var news = await context.NewsArticles
+                        .FirstOrDefaultAsync(a => a.NewsArticleId == id);
+
+                    if (news == null)
+                    {
+                        return null;
+                    }
+
+                    return new NewsDto
+                    {
+                        NewsArticleId = news.NewsArticleId,
+                        CategoryId = news.CategoryId,
+                        CreatedById = news.CreatedById,
+                        CreatedDate = news.CreatedDate,
+                        Headline = news.Headline,
+                        ModifiedDate = news.ModifiedDate,
+                        NewsContent = news.NewsContent,
+                        NewsSource = news.NewsSource,
+                        NewsStatus = news.NewsStatus,
+                        NewsTitle = news.NewsTitle,
+                        UpdatedById = news.UpdatedById
+                    };
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static async Task<NewsDto> Edit(EditNewsDto dto)
+        {
+            using (var context = new FunewsManagementContext())
+            {
+                var news = await context.NewsArticles.FindAsync(dto.NewsArticleId);
+
+                if (news == null)
+                {
+                    throw new KeyNotFoundException("News not found");
+                }
+
+                news.NewsTitle = dto.NewsTitle;
+                news.Headline = dto.Headline;
+                news.NewsContent = dto.NewsContent;
+                news.NewsSource = dto.NewsSource;
+                news.CategoryId = dto.CategoryId;
+                news.NewsStatus = dto.NewsStatus;
+                news.ModifiedDate = DateTime.UtcNow;
+                news.UpdatedById = dto.CreatedById;
+
+                context.NewsArticles.Update(news);
+                await context.SaveChangesAsync();
+
+                return new NewsDto
+                {
+                    NewsArticleId = news.NewsArticleId,
+                    NewsTitle = news.NewsTitle,
+                    Headline = news.Headline,
+                    NewsContent = news.NewsContent,
+                    NewsSource = news.NewsSource,
+                    CategoryId = news.CategoryId,
+                    NewsStatus = news.NewsStatus,
+                    CreatedById = news.CreatedById,
+                    CreatedDate = news.CreatedDate,
+                    ModifiedDate = news.ModifiedDate,
+                    UpdatedById = news.UpdatedById
+                };
+            }
+        }
     }
 }

@@ -7,5 +7,7 @@ namespace Repositories
     {
         Task<List<NewsDto>> GetNewsAsync(NewsQuery newsQuery);
         Task<NewsDto> CreateAsync(CreateNewsDto dto);
+        Task<NewsDto> FindById(string id);
+        Task<NewsDto> EditAsync(EditNewsDto dto);
     }
 }

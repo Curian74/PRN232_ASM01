@@ -17,15 +17,14 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             _categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(int? pageIndex = 1, int? pageSize = 10)
+        public async Task<IActionResult> Index(bool isActive = true, int? pageIndex = 1, int? pageSize = 10)
         {
             try
             {
-                var response = await _newsService.GetNews(pageIndex, pageSize);
-
+                var response = await _newsService.GetNews(pageIndex, pageSize, isActive);
+                ViewBag.IsActive = isActive;
                 return View(response);
             }
-
             catch (Exception ex)
             {
                 return View(ex);
@@ -56,6 +55,64 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             try
             {
                 await _newsService.CreateAsync(model);
+
+                TempData["success"] = "Create successfully!";
+
+                return RedirectToAction("Index");
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var news = await _newsService.GetByIdAsync(id);
+
+            if (news == null)
+            {
+                return NotFound();
+            }
+
+            var cats = await _categoryService.GetAllAsync();
+
+            ViewBag.CategoryList = cats.Select(x => new SelectListItem
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId.ToString()
+            }).ToList();
+
+            var modelType = new EditNewsDto
+            {
+                NewsArticleId = news.NewsArticleId,
+                CategoryId = news.CategoryId,
+                CreatedById = news.CreatedById,
+                Headline = news.Headline,
+                NewsContent = news.NewsContent,
+                NewsSource = news.NewsSource,   
+                NewsStatus = news.NewsStatus,
+                NewsTitle = news.NewsTitle,
+            };
+
+            return View(modelType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditNewsDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var result = await _newsService.UpdateAsync(model);
+
+                TempData["success"] = "Update successfully!";
 
                 return RedirectToAction("Index");
             }

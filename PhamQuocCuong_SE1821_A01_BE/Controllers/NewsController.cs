@@ -2,7 +2,6 @@
 using DataAccessObjects.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Repositories;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PhamQuocCuong_SE1821_A01_BE.Controllers
 {
@@ -45,6 +44,41 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetNews(string id)
+        {
+            var news = await _newsArticleRepository.FindById(id);
+
+            if (news == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(news);
+        }
+
+        [HttpPut]
+        [Route("Edit")]
+        public async Task<IActionResult> Edit(EditNewsDto dto)
+        {
+            try
+            {
+                var result = await _newsArticleRepository.EditAsync(dto);
+
+                return Ok(result);
+            }
+
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }

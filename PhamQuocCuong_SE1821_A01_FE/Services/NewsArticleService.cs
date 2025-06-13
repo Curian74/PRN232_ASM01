@@ -13,10 +13,10 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             _apiService = apiService;
         }
 
-        public async Task<PagedResult<NewsDto>> GetNews(int? pageIndex, int? pageSize)
+        public async Task<PagedResult<NewsDto>> GetNews(int? pageIndex, int? pageSize, bool isActive)
         {
             var response = await _apiService
-                .GetAsync<PagedResult<NewsDto>>($"News?PageIndex={pageIndex}&PageSize={pageSize}");
+                .GetAsync<PagedResult<NewsDto>>($"News?PageIndex={pageIndex}&PageSize={pageSize}&isActive={isActive}");
 
             return response;
         }
@@ -27,18 +27,18 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
                 .PostAsync<NewsDto>($"News", dto);
         }
 
-        public async Task<SystemAccountDto> GetByIdAsync(short id)
+        public async Task<NewsDto> GetByIdAsync(string id)
         {
             var response = await _apiService
-                .GetAsync<SystemAccountDto>($"SystemAccounts/{id}");
+                .GetAsync<NewsDto>($"News/{id}");
 
             return response;
         }
 
-        public async Task<SystemAccountDto> UpdateAsync(EditAccountDto dto)
+        public async Task<NewsDto> UpdateAsync(EditNewsDto dto)
         {
             var response = await _apiService
-                .PutAsync<SystemAccountDto>($"SystemAccounts/Edit", dto);
+                .PutAsync<NewsDto>($"News/Edit", dto);
 
             return response;
         }
