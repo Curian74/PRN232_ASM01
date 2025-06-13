@@ -45,5 +45,52 @@ namespace DataAccessObjects
                 throw new Exception(ex.Message);
             }
         }
+
+        public static async Task<NewsDto> Create(CreateNewsDto dto)
+        {
+            using var context = new FunewsManagementContext();
+
+            var check = await context.NewsArticles
+                .FirstOrDefaultAsync(n => n.NewsArticleId == dto.NewsArticleId)
+                != null;
+
+            if (check)
+            {
+                throw new InvalidOperationException("News article with the id already existed.");
+            }
+
+            var newNews = new NewsArticle
+            {
+                NewsArticleId = dto.NewsArticleId,
+                CategoryId = dto.CategoryId,
+                CreatedById = dto.CreatedById,
+                CreatedDate = DateTime.Now,
+                Headline = dto.Headline,
+                ModifiedDate = null,
+                NewsContent = dto.NewsContent,
+                NewsSource = dto.NewsSource,
+                NewsStatus = dto.NewsStatus,
+                NewsTitle = dto.NewsTitle,
+            };
+
+            await context.NewsArticles.AddAsync(newNews);
+            await context.SaveChangesAsync();
+
+            return new NewsDto
+            {
+                NewsTitle = newNews.NewsTitle,
+                NewsContent = newNews.NewsContent,
+                NewsSource = newNews.NewsSource,
+                NewsStatus = newNews.NewsStatus,
+                AuthorName = "",
+                CreatedById = newNews.CreatedById,
+                CreatedDate = DateTime.Now,
+                CategoryId = newNews.CategoryId,
+                ModifiedDate = DateTime.Now,
+                Headline = newNews.Headline,
+                NewsArticleId = newNews.NewsArticleId,
+                UpdatedById = null,
+            };
+        }
     }
 }

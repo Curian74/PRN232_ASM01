@@ -6,5 +6,6 @@ namespace Repositories
     public interface INewsArticleRepository
     {
         Task<List<NewsDto>> GetNewsAsync(NewsQuery newsQuery);
+        Task<NewsDto> CreateAsync(CreateNewsDto dto);
     }
 }

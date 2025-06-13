@@ -31,5 +31,21 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
 
             return Ok(data);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateNewsDto dto)
+        {
+            try
+            {
+                var data = await _newsArticleRepository.CreateAsync(dto);
+
+                return Ok(data);
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -13,6 +13,14 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             _apiService = apiService;
         }
 
+        public async Task<List<CategoryDto>> GetAllAsync()
+        {
+            var response = await _apiService
+                .GetAsync<List<CategoryDto>>($"Categories");
+
+            return response;
+        }
+
         public async Task<PagedResult<CategoryDto>> GetCategoriesAsync(int? pageIndex, int? pageSize)
         {
             var response = await _apiService
