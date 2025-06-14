@@ -224,6 +224,12 @@ namespace DataAccessObjects
                     throw new Exception("Email already exists!");
                 }
 
+                if ((dto.AccountPassword != null || dto.OldPassword != null || dto.ConfirmPass != null)
+                    && dto.OldPassword != account.AccountPassword)
+                {
+                    throw new InvalidOperationException("Old password is not correct!");
+                }
+
                 if (dto.ConfirmPass != dto.AccountPassword)
                 {
                     throw new InvalidOperationException("Passwords must match!");
@@ -234,7 +240,7 @@ namespace DataAccessObjects
                     AccountId = dto.AccountId,
                     AccountEmail = dto.AccountEmail,
                     AccountName = dto.AccountName,
-                    AccountRole = dto.AccountRole,
+                    AccountRole = dto.AccountRole == null ? account.AccountRole : dto.AccountRole,
                     AccountPassword = dto.AccountPassword == null ? account.AccountPassword : dto.AccountPassword,
                 };
 

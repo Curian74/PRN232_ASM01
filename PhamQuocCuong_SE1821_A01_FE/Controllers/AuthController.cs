@@ -10,10 +10,12 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
     public class AuthController : Controller
     {
         private readonly AuthService _authService;
+        private readonly SystemAccountService _systemAccountService;
 
-        public AuthController(AuthService authService)
+        public AuthController(AuthService authService, SystemAccountService systemAccountService)
         {
             _authService = authService;
+            _systemAccountService = systemAccountService;
         }
 
         [HttpGet]
@@ -73,6 +75,51 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             await HttpContext.SignOutAsync();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Profile(short id)
+        {
+            var account = await _systemAccountService.GetByIdAsync(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            var modelType = new EditAccountDto
+            {
+                AccountEmail = account.AccountEmail,
+                AccountId = account.AccountId,
+                AccountName = account.AccountName,
+                AccountPassword = account.AccountPassword,
+                AccountRole = account.AccountRole,
+            };
+
+            return View(modelType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(EditAccountDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var result = await _systemAccountService.UpdateAsync(model);
+
+                TempData["success"] = "Update successfully!";
+
+                return View(model);
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
+                return View(model);
+            }
         }
     }
 }
