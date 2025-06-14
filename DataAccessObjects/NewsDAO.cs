@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using DataAccessObjects.Dtos;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DataAccessObjects
 {
@@ -17,6 +18,11 @@ namespace DataAccessObjects
                     if (newsQuery.IsActive.HasValue)
                     {
                         newsQueryable = newsQueryable.Where(n => n.NewsStatus == newsQuery.IsActive);
+                    }
+
+                    if (!string.IsNullOrEmpty(newsQuery.SearchTerm))
+                    {
+                        newsQueryable = newsQueryable.Where(n => n.NewsTitle!.Contains(newsQuery.SearchTerm));
                     }
 
                     var dtoEntities = await newsQueryable.Select(n => new NewsDto

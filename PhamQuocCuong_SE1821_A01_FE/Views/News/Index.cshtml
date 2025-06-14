@@ -15,15 +15,49 @@
 }
 
 <div class="d-flex justify-content-between mb-3">
-    <a asp-action="Index"
-       asp-route-isActive="@(ViewBag.IsActive != null ? !((bool)ViewBag.IsActive) : false)"
-       asp-route-pageIndex="1"
-       asp-route-pageSize="@Model.PageSize"
-       class="btn btn-outline-primary">
-        Show @(ViewBag.IsActive == true ? "Inactive" : "Active") News
-    </a>
-    <a asp-action="Create" class="btn btn-success">Create new article</a>
+    <div>
+        <form asp-action="Index" method="get" class="mb-3">
+            <div class="d-flex gap-3">
+                <div>
+                    <input name="searchTerm"
+                           value="@Context.Request.Query["searchTerm"]"
+                           type="text" class="form-control"
+                           placeholder="Search by title..." />
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
 
+                <div>
+                    <a asp-action="Index" class="btn btn-outline-primary">Clear Fitlers</a>
+                </div>
+            </div>
+        </form>
+        @{
+            var isActiveString = Context.Request.Query["isActive"].ToString();
+            bool? isActive = null;
+
+            if (bool.TryParse(isActiveString, out var parsed))
+            {
+                isActive = parsed;
+            }
+
+            var toggledIsActive = isActive.HasValue ? !isActive.Value : false;
+        }
+
+        <a asp-action="Index"
+           asp-route-searchTerm="@Context.Request.Query["searchTerm"]"
+           asp-route-isActive="@toggledIsActive"
+           asp-route-pageIndex="1"
+           asp-route-pageSize="@Model.PageSize"
+           class="btn btn-outline-primary">
+            Show @(isActive == true ? "Inactive" : "Active") News
+        </a>
+
+    </div>
+    <div>
+        <a asp-action="Create" class="btn btn-success">Create new article</a>
+    </div>
 </div>
 
 <table class="table table-bordered">
@@ -72,7 +106,15 @@
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(i == Model.PageIndex ? "active" : "")">
-                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, pageSize = Model.PageSize })">@i</a>
+                <a class="page-link"
+                   href="@Url.Action("Index", new {
+               pageIndex = i,
+               pageSize = Model.PageSize,
+               searchTerm = Context.Request.Query["searchTerm"],
+               isActive = Context.Request.Query["isActive"]
+           })">
+                    @i
+                </a>
             </li>
         }
     </ul>

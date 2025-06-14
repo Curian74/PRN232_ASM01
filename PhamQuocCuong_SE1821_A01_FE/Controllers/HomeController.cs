@@ -19,7 +19,7 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
         {
             try
             {
-                var response = await _newsArticleService.GetNews(pageIndex, pageSize, true);
+                var response = await _newsArticleService.GetNews(pageIndex, pageSize, true, "");
 
                 return View(response);
             }
