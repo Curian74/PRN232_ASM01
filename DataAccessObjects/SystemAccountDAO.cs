@@ -124,48 +124,46 @@ namespace DataAccessObjects
 
         public static async Task<SystemAccountDto> Create(CreateAccountDto dto)
         {
-            try
+            using var context = new FunewsManagementContext();
+
+            if (dto.ConfirmPass != dto.AccountPassword)
             {
-                using var context = new FunewsManagementContext();
-
-                if (dto.ConfirmPass != dto.AccountPassword)
-                {
-                    throw new Exception("Password must match!");
-                }
-
-                int latestAccountId = await context.SystemAccounts
-                        .OrderByDescending(x => x.AccountId)
-                        .Select(x => (int)x.AccountId)
-                        .FirstOrDefaultAsync();
-
-                {
-                    var account = new SystemAccount
-                    {
-                        AccountId = (short)(latestAccountId + 1),
-                        AccountEmail = dto.AccountEmail,
-                        AccountName = dto.AccountName,
-                        AccountRole = dto.AccountRole,
-                        AccountPassword = dto.AccountPassword,
-                    };
-
-                    await context.SystemAccounts.AddAsync(account);
-                    await context.SaveChangesAsync();
-
-                    return new SystemAccountDto
-                    {
-                        AccountId = account.AccountId,
-                        AccountEmail = account.AccountEmail,
-                        AccountName = account.AccountName,
-                        AccountRole = account.AccountRole,
-                        AccountPassword = account.AccountPassword,
-                    };
-                }
+                throw new Exception("Password must match!");
             }
 
-            catch (Exception ex)
+            bool emailExists = await context.SystemAccounts
+                .AnyAsync(x => x.AccountEmail == dto.AccountEmail);
+
+            if (emailExists)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Email already exists!");
             }
+
+            int latestAccountId = await context.SystemAccounts
+                .OrderByDescending(x => x.AccountId)
+                .Select(x => (int)x.AccountId)
+                .FirstOrDefaultAsync();
+
+            var account = new SystemAccount
+            {
+                AccountId = (short)(latestAccountId + 1),
+                AccountEmail = dto.AccountEmail,
+                AccountName = dto.AccountName,
+                AccountRole = dto.AccountRole,
+                AccountPassword = dto.AccountPassword,
+            };
+
+            await context.SystemAccounts.AddAsync(account);
+            await context.SaveChangesAsync();
+
+            return new SystemAccountDto
+            {
+                AccountId = account.AccountId,
+                AccountEmail = account.AccountEmail,
+                AccountName = account.AccountName,
+                AccountRole = account.AccountRole,
+                AccountPassword = account.AccountPassword,
+            };
         }
 
         public static async Task<SystemAccountDto> FindById(short id)

@@ -23,7 +23,7 @@
     <tbody>
         @if (Model.Items != null && Model.Items.Any())
         {
-            foreach (var account in Model.Items)
+            foreach (var account in Model.Items.Where(x => x.AccountId.ToString() != User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
             {
                 <tr>
                     <td>@account.AccountId</td>
