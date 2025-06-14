@@ -45,14 +45,41 @@
             var toggledIsActive = isActive.HasValue ? !isActive.Value : false;
         }
 
-        <a asp-action="Index"
-           asp-route-searchTerm="@Context.Request.Query["searchTerm"]"
-           asp-route-isActive="@toggledIsActive"
-           asp-route-pageIndex="1"
-           asp-route-pageSize="@Model.PageSize"
-           class="btn btn-outline-primary">
-            Show @(isActive == true ? "Inactive" : "Active") News
-        </a>
+        <div class="d-flex gap-3">
+
+            @{
+                var currentUserIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                short? currentUserId = short.TryParse(currentUserIdString, out var uid) ? uid : null;
+
+                var createdByIdQuery = Context.Request.Query["createdById"].ToString();
+                bool isFilteringByMe = short.TryParse(createdByIdQuery, out var cid) && currentUserId == cid;
+
+                var myToggleCreatedById = isFilteringByMe ? null : currentUserId;
+            }
+
+            <a asp-action="Index"
+               asp-route-searchTerm="@Context.Request.Query["searchTerm"]"
+               asp-route-isActive="@toggledIsActive"
+               asp-route-pageIndex="1"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-createdById="@currentUserId"
+               class="btn btn-outline-primary">
+                Show @(isActive == true ? "Inactive" : "Active") articles
+            </a>
+
+            @if (currentUserId != null)
+            {
+                <a asp-action="Index"
+                   asp-route-searchTerm="@Context.Request.Query["searchTerm"]"
+                   asp-route-isActive="@Context.Request.Query["isActive"]"
+                   asp-route-createdById="@myToggleCreatedById"
+                   asp-route-pageIndex="1"
+                   asp-route-pageSize="@Model.PageSize"
+                   class="btn @(isFilteringByMe ? "btn-primary" : "btn-outline-primary")">
+                    Show articles created by me
+                </a>
+            }
+        </div>
 
     </div>
     <div>
@@ -111,7 +138,8 @@
                pageIndex = i,
                pageSize = Model.PageSize,
                searchTerm = Context.Request.Query["searchTerm"],
-               isActive = Context.Request.Query["isActive"]
+               isActive = Context.Request.Query["isActive"],
+               createdById = Context.Request.Query["createdById"]
            })">
                     @i
                 </a>

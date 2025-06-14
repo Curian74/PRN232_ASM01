@@ -13,11 +13,12 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             _apiService = apiService;
         }
 
-        public async Task<PagedResult<NewsDto>> GetNews(int? pageIndex, int? pageSize, bool? isActive, string? searchTerm)
+        public async Task<PagedResult<NewsDto>> GetNews(int? pageIndex, int? pageSize,
+            bool? isActive, string? searchTerm, short? createdById = null)
         {
             var response = await _apiService
                 .GetAsync<PagedResult<NewsDto>>($"News?PageIndex={pageIndex}" +
-                $"&PageSize={pageSize}&isActive={isActive}&searchTerm={searchTerm}");
+                $"&PageSize={pageSize}&isActive={isActive}&searchTerm={searchTerm}&createdById={createdById}");
 
             return response;
         }

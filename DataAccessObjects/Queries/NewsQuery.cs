@@ -6,5 +6,6 @@
         public int PageSize { get; set; } = 10;
         public bool? IsActive { get; set; } = true;
         public string? SearchTerm { get; set; }
+        public short? CreatedById { get; set; }
     }
 }

@@ -18,11 +18,11 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
         }
 
         public async Task<IActionResult> Index(bool? isActive = true, int? pageIndex = 1, int? pageSize = 5,
-            string? searchterm = null)
+            string? searchterm = null, short? createdById = null)
         {
             try
             {
-                var response = await _newsService.GetNews(pageIndex, pageSize, isActive, searchterm);
+                var response = await _newsService.GetNews(pageIndex, pageSize, isActive, searchterm, createdById);
                 return View(response);
             }
             catch (Exception ex)

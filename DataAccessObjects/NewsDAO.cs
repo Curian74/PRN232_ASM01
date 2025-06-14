@@ -20,6 +20,11 @@ namespace DataAccessObjects
                         newsQueryable = newsQueryable.Where(n => n.NewsStatus == newsQuery.IsActive);
                     }
 
+                    if (newsQuery.CreatedById.HasValue)
+                    {
+                        newsQueryable = newsQueryable.Where(n => n.CreatedById == newsQuery.CreatedById);
+                    }
+
                     if (!string.IsNullOrEmpty(newsQuery.SearchTerm))
                     {
                         newsQueryable = newsQueryable.Where(n => n.NewsTitle!.Contains(newsQuery.SearchTerm));
