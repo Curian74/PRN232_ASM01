@@ -37,6 +37,8 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             {
                 await _categorySerivce.CreateAsync(model);
 
+                TempData["success"] = "Create successfully!";
+
                 return RedirectToAction("Index");
             }
 
@@ -87,6 +89,8 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             try
             {
                 var result = await _categorySerivce.UpdateAsync(model);
+
+                TempData["success"] = "Update successfully!";
 
                 return RedirectToAction("Index");
             }

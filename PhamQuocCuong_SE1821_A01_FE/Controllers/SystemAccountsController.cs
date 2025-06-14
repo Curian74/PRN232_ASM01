@@ -38,6 +38,8 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             {
                 await _accountService.CreateAccountAsync(model);
 
+                TempData["success"] = "Create successfully!";
+
                 return RedirectToAction("Index", "systemAccounts");
             }
 
@@ -80,6 +82,8 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             try
             {
                 var result = await _accountService.UpdateAsync(model);
+
+                TempData["success"] = "Update successfully!";
 
                 return RedirectToAction("Index");
             }

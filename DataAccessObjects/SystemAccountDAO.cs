@@ -216,6 +216,14 @@ namespace DataAccessObjects
                     throw new KeyNotFoundException();
                 }
 
+                bool emailExists = await context.SystemAccounts
+                .AnyAsync(x => x.AccountEmail == dto.AccountEmail && dto.AccountEmail != account.AccountEmail);
+
+                if (emailExists)
+                {
+                    throw new Exception("Email already exists!");
+                }
+
                 if (dto.ConfirmPass != dto.AccountPassword)
                 {
                     throw new InvalidOperationException("Passwords must match!");
@@ -227,7 +235,7 @@ namespace DataAccessObjects
                     AccountEmail = dto.AccountEmail,
                     AccountName = dto.AccountName,
                     AccountRole = dto.AccountRole,
-                    AccountPassword = dto.AccountPassword,
+                    AccountPassword = dto.AccountPassword == null ? account.AccountPassword : dto.AccountPassword,
                 };
 
                 context.SystemAccounts.Update(entity);
