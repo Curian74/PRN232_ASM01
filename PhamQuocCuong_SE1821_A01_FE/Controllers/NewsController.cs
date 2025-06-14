@@ -52,6 +52,14 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
                 return View(model);
             }
 
+            var cats = await _categoryService.GetAllAsync();
+
+            ViewBag.CategoryList = cats.Select(x => new SelectListItem
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId.ToString()
+            }).ToList();
+
             try
             {
                 await _newsService.CreateAsync(model);
