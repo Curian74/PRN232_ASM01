@@ -16,6 +16,13 @@ namespace DataAccessObjects
                 {
                     var accounts = context.SystemAccounts.AsQueryable();
 
+                    if (!string.IsNullOrEmpty(systemAccountQuery.SearchTerm))
+                    {
+                        accounts = accounts.Where(a =>
+                            (a.AccountName != null && a.AccountName.Contains(systemAccountQuery.SearchTerm)) ||
+                            (a.AccountEmail != null && a.AccountEmail.Contains(systemAccountQuery.SearchTerm)));
+                    }
+
                     var dtoEntities = await accounts.Select(x => new SystemAccountDto
                     {
                         AccountId = x.AccountId,

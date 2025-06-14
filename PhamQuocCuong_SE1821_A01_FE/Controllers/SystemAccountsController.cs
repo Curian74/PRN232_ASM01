@@ -15,10 +15,9 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             _accountService = accountService;
         }
 
-        public async Task<IActionResult> Index(int? pageIndex = 1, int? pageSize = 5)
+        public async Task<IActionResult> Index(int? pageIndex = 1, int? pageSize = 5, string? searchTerm = null)
         {
-            var result = await _accountService.GetAccountsAsync(pageIndex, pageSize);
-
+            var result = await _accountService.GetAccountsAsync(pageIndex, pageSize, searchTerm);
             return View(result);
         }
 

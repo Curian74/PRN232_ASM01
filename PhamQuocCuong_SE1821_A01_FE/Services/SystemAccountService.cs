@@ -13,10 +13,11 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             _apiService = apiService;
         }
 
-        public async Task<PagedResult<SystemAccountDto>> GetAccountsAsync(int? pageIndex, int? pageSize)
+        public async Task<PagedResult<SystemAccountDto>> GetAccountsAsync(int? pageIndex, int? pageSize, string? searchTerm)
         {
             var response = await _apiService
-                .GetAsync<PagedResult<SystemAccountDto>>($"SystemAccounts?PageIndex={pageIndex}&PageSize={pageSize}");
+                .GetAsync<PagedResult<SystemAccountDto>>($"SystemAccounts?PageIndex" +
+                $"={pageIndex}&PageSize={pageSize}&searchTerm={searchTerm}");
 
             return response;
         }
