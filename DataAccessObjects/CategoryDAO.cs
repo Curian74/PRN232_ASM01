@@ -158,6 +158,12 @@ namespace DataAccessObjects
                 {
                     var accounts = context.Categories.AsQueryable();
 
+                    if (!string.IsNullOrEmpty(query.SearchTerm))
+                    {
+                        accounts = accounts.Where(a =>
+                            (a.CategoryName != null && a.CategoryName.Contains(query.SearchTerm)));
+                    }
+
                     var dtoEntities = await accounts.Select(x => new CategoryDto
                     {
                         CategoryDesciption = x.CategoryDesciption,

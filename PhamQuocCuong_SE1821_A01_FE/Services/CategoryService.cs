@@ -21,10 +21,11 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             return response;
         }
 
-        public async Task<PagedResult<CategoryDto>> GetCategoriesAsync(int? pageIndex, int? pageSize)
+        public async Task<PagedResult<CategoryDto>> GetCategoriesAsync(int? pageIndex, int? pageSize, string? searchTerm)
         {
             var response = await _apiService
-                .GetAsync<PagedResult<CategoryDto>>($"Categories/Paged?PageIndex={pageIndex}&PageSize={pageSize}");
+                .GetAsync<PagedResult<CategoryDto>>($"Categories/Paged?" +
+                $"PageIndex={pageIndex}&PageSize={pageSize}&searchTerm={searchTerm}");
 
             return response;
         }

@@ -17,7 +17,8 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             _categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(bool isActive = true, int? pageIndex = 1, int? pageSize = 5)
+        public async Task<IActionResult> Index(bool isActive = true, int? pageIndex = 1, int? pageSize = 5,
+            string? searchterm = null)
         {
             try
             {
