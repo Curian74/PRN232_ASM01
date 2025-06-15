@@ -25,6 +25,11 @@
 <div class="d-flex justify-content-between mb-3">
     <div>
         <form asp-action="Index" method="get" class="mb-3">
+            <input type="hidden" name="isActive" value="@Context.Request.Query["isActive"]" />
+            <input type="hidden" name="createdById" value="@Context.Request.Query["createdById"]" />
+            <input type="hidden" name="pageSize" value="@Model.PageSize" />
+            <input type="hidden" name="pageIndex" value="1" />
+
             <div class="d-flex gap-3">
                 <div>
                     <input name="searchTerm"
@@ -37,13 +42,13 @@
                 </div>
 
                 <div>
-                    <a asp-action="Index" class="btn btn-outline-primary">Clear Fitlers</a>
+                    <a asp-action="Index" class="btn btn-outline-primary">Clear Filters</a>
                 </div>
             </div>
         </form>
         @{
             var isActiveString = Context.Request.Query["isActive"].ToString();
-            bool? isActive = null;
+            bool? isActive = true;
 
             if (bool.TryParse(isActiveString, out var parsed))
             {
@@ -68,9 +73,9 @@
             <a asp-action="Index"
                asp-route-searchTerm="@Context.Request.Query["searchTerm"]"
                asp-route-isActive="@toggledIsActive"
+               asp-route-createdById="@Context.Request.Query["createdById"]"
                asp-route-pageIndex="1"
                asp-route-pageSize="@Model.PageSize"
-               asp-route-createdById="@currentUserId"
                class="btn btn-outline-primary">
                 Show @(isActive == true ? "Inactive" : "Active") articles
             </a>
