@@ -23,6 +23,15 @@
         <span asp-validation-for="CategoryDesciption" class="text-danger"></span>
     </div>
 
+    <div class="form-group w-25">
+        <label asp-for="ParentCategoryId" class="control-label">Parent Category</label>
+        <select asp-for="ParentCategoryId" class="form-control"
+                asp-items="ViewBag.Categories as List<SelectListItem>">
+            <option value="">-- Select Category --</option>
+        </select>
+        <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+    </div>
+
     <div class="form-group">
         <input name="IsActive" checked="@Model.IsActive" value="true" type="checkbox" class="form-check-input" />
         <label asp-for="IsActive" class="form-check-label"></label>

@@ -1,5 +1,6 @@
 ﻿using DataAccessObjects.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PhamQuocCuong_SE1821_A01_FE.Services;
 
 namespace PhamQuocCuong_SE1821_A01_FE.Controllers
@@ -20,8 +21,16 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             return View(result);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var categories = await _categorySerivce.GetAllAsync();
+
+            ViewBag.Categories = categories.Select(c => new SelectListItem
+            {
+                Text = c.CategoryName,
+                Value = c.CategoryId.ToString(),
+            }).ToList();
+
             return View();
         }
 
@@ -65,6 +74,14 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             {
                 return NotFound();
             }
+
+            var categories = await _categorySerivce.GetAllAsync();
+
+            ViewBag.Categories = categories.Select(c => new SelectListItem
+            {
+                Text = c.CategoryName,
+                Value = c.CategoryId.ToString(),
+            }).ToList();
 
             var dto = new UpdateCategoryDto
             {
