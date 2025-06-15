@@ -1,0 +1,76 @@
+﻿@model PagedResult<NewsDto>
+
+@{
+    ViewData["Title"] = "News Report";
+}
+
+<h2 class="mb-4 text-center">News Report</h2>
+
+<form asp-action="Report" method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input type="date" class="form-control" id="startDate" name="startDate"
+               value="@ViewBag.StartDate?.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-md-4">
+        <label for="endDate" class="form-label">End Date</label>
+        <input type="date" class="form-control" id="endDate" name="endDate"
+               value="@ViewBag.EndDate?.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Created Date</th>
+            <th>Is Active</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items != null && Model.Items.Any())
+        {
+            foreach (var account in Model.Items)
+            {
+                <tr>
+                    <td>@account.NewsArticleId</td>
+                    <td>@account.NewsTitle</td>
+                    <td>@account.CreatedDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@account.NewsStatus</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">Select filter values to continue.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+@if (Model?.TotalPages > 1)
+{
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Report", new {
+                        startDate = ViewBag.StartDate?.ToString("yyyy-MM-dd"),
+                        endDate = ViewBag.EndDate?.ToString("yyyy-MM-dd"),
+                        pageIndex = i,
+                        pageSize = Model.PageSize
+                    })">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

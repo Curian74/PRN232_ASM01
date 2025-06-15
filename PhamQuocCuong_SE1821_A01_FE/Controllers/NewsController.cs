@@ -1,4 +1,5 @@
-﻿using DataAccessObjects.Dtos;
+﻿using DataAccessObjects;
+using DataAccessObjects.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PhamQuocCuong_SE1821_A01_FE.Services;
@@ -100,7 +101,7 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
                 CreatedById = news.CreatedById,
                 Headline = news.Headline,
                 NewsContent = news.NewsContent,
-                NewsSource = news.NewsSource,   
+                NewsSource = news.NewsSource,
                 NewsStatus = news.NewsStatus,
                 NewsTitle = news.NewsTitle,
             };
@@ -139,5 +140,32 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> Report(DateTime? startDate, DateTime? endDate,
+                int? pageIndex = 1, int? pageSize = 5)
+        {
+            try
+            {
+                if (startDate == null && endDate == null)
+                {
+                    var empty = new PagedResult<NewsDto>(new List<NewsDto>(), 1, 5, 0);
+                    return View(empty);
+                }
+
+                var response = await _newsService.GetNewsReport(startDate, endDate, pageIndex, pageSize);
+
+                ViewBag.StartDate = startDate;
+                ViewBag.EndDate = endDate;
+
+                return View(response);
+            }
+            catch (Exception ex)
+            {
+                var empty = new PagedResult<NewsDto>(new List<NewsDto>(), 1, 5, 0);
+                ViewBag.Error = ex.Message;
+                return View(empty);
+            }
+        }
+
     }
 }

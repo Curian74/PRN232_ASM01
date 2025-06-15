@@ -96,5 +96,30 @@ namespace PhamQuocCuong_SE1821_A01_BE.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("Report")]
+        public async Task<IActionResult> Report([FromQuery] DateTime? startDate,
+            [FromQuery] DateTime? endDate, [FromQuery] int pageIndex = 1, int pageSize = 5)
+        {
+            try
+            {
+                var newsArticles = await _newsArticleRepository.GetReportAsync(startDate, endDate);
+
+                var skip = (pageIndex - 1) * pageSize;
+
+                var pagedData = newsArticles.Skip(skip).Take(pageSize);
+
+                var data = new PagedResult<NewsDto>(pagedData,
+                    pageIndex, pageSize, newsArticles.Count);
+
+                return Ok(data);
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

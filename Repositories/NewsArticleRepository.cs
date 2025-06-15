@@ -29,5 +29,10 @@ namespace Repositories
         {
             return NewsDAO.GetNewsArticleAsync(newsQuery);
         }
+
+        public Task<List<NewsDto>> GetReportAsync(DateTime? startDate, DateTime? endDate)
+        {
+            return NewsDAO.GetNewsReportStatistics(startDate, endDate);
+        }
     }
 }

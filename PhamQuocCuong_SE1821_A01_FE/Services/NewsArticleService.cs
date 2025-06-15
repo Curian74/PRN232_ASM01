@@ -23,6 +23,16 @@ namespace PhamQuocCuong_SE1821_A01_FE.Services
             return response;
         }
 
+        public async Task<PagedResult<NewsDto>> GetNewsReport(DateTime? startDate, DateTime? endDate,
+            int? pageIndex = 1, int? pageSize = 5)
+        {
+            var response = await _apiService
+                .GetAsync<PagedResult<NewsDto>>($"News/Report?startDate={startDate}&endDate={endDate}" +
+                $"&pageIndex={pageIndex}&pageSize={pageSize}");
+
+            return response;
+        }
+
         public async Task CreateAsync(CreateNewsDto dto)
         {
             var response = await _apiService

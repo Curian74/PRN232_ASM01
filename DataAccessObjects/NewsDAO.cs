@@ -1,7 +1,6 @@
 ﻿using BusinessObjects;
 using DataAccessObjects.Dtos;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DataAccessObjects
 {
@@ -207,5 +206,41 @@ namespace DataAccessObjects
                 throw new Exception(e.Message);
             }
         }
-    }
+
+        public static async Task<List<NewsDto>> GetNewsReportStatistics(DateTime? startDate, DateTime? endDate)
+        {
+            using (var context = new FunewsManagementContext())
+            {
+                var newsQueryable = context.NewsArticles.AsQueryable();
+
+                if (startDate == null || endDate == null)
+                {
+                    throw new Exception("Start date and end date must not be null.");
+                }
+
+                newsQueryable = newsQueryable
+                    .Where(n => n.CreatedDate >= startDate && n.CreatedDate <= endDate)
+                    .OrderByDescending(x => x.CreatedDate);
+
+                var dtoEntities = await newsQueryable.Select(n => new NewsDto
+                {
+                    NewsArticleId = n.NewsArticleId,
+                    CategoryId = n.CategoryId,
+                    CreatedById = n.CreatedById,
+                    CreatedDate = n.CreatedDate,
+                    Headline = n.Headline,
+                    ModifiedDate = n.ModifiedDate,
+                    NewsContent = n.NewsContent,
+                    NewsSource = n.NewsSource,
+                    NewsStatus = n.NewsStatus,
+                    NewsTitle = n.NewsTitle,
+                    UpdatedById = n.UpdatedById,
+                    AuthorName = n.CreatedBy.AccountName,
+                })
+                    .ToListAsync();
+
+                return dtoEntities;
+            }
+        }
+}
 }

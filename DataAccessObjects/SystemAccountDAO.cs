@@ -118,7 +118,7 @@ namespace DataAccessObjects
 
                 if (account == null)
                 {
-                    throw new Exception("Invalid credentials.");
+                    throw new Exception("Wrong email or password.");
                 }
 
                 return account;

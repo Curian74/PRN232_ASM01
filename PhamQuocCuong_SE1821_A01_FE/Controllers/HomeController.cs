@@ -15,7 +15,7 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
             _newsArticleService = newsArticleService;
         }
 
-        public async Task<IActionResult> Index(int? pageIndex = 1, int? pageSize = 10)
+        public async Task<IActionResult> Index(int? pageIndex = 1, int? pageSize = 5)
         {
             try
             {
