@@ -138,6 +138,16 @@ namespace PhamQuocCuong_SE1821_A01_FE.Controllers
         {
             var result = await _newsService.Delete(id);
 
+            if (result)
+            {
+                TempData["success"] = "Delete successfully.";
+            }
+
+            else
+            {
+                TempData["error"] = "Failed to delete.";
+            }
+
             return RedirectToAction("Index");
         }
 
